@@ -563,7 +563,16 @@ class KeywordProcessor(object):
                 sequence_start_pos = idx
         if span_info:
             return keywords_extracted
-        return [value[0] for value in keywords_extracted]
+
+        # return [value[0] for value in keywords_extracted]
+        match_keyword = []
+        for value in keywords_extracted:
+            if isinstance(value[0], str):
+                match_keyword.append(value[0])
+            else:
+                match_keyword.extend(value[0])
+        return match_keyword
+
 
     def replace_keywords(self, sentence):
         """Searches in the string for all keywords present in corpus.
