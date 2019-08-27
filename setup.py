@@ -15,8 +15,8 @@ class PyTest(Command):
         errno = subprocess.call(['py.test'])
         raise SystemExit(errno)
 
-name = 'flashtext'
-version = '2.7'
+name = 'flashtext-mod'
+version = '2.71'
 
 cmdclass = {'test': PyTest}
 
@@ -29,12 +29,13 @@ except ImportError:
 setup(
     name=name,
     version=version,
-    url='http://github.com/vi3k6i5/flashtext',
-    author='Vikash Singh',
-    author_email='vikash.duliajan@gmail.com',
+    url='https://github.com/brlala/flashtext-mod',
+    author='brlala',
+    author_email='henrytlh@hotmail.com',
     description='Extract/Replaces keywords in sentences.',
+    download_url='https://github.com/brlala/flashtext-mod/archive/v2.71.tar.gz',
     long_description=open('README.rst').read(),
-    packages=['flashtext'],
+    packages=['flashtext-mod'],
     install_requires=[],
     platforms='any',
     cmdclass=cmdclass,
