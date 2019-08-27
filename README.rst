@@ -30,7 +30,7 @@ Installation
 ------------
 ::
 
-    $ pip install flashtext
+    $ pip install flashtext-mod
 
 
 API doc

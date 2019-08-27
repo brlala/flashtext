@@ -35,7 +35,7 @@ class KeywordProcessor(object):
         * Idea came from this `Stack Overflow Question <https://stackoverflow.com/questions/44178449/regex-replace-is-taking-time-for-millions-of-documents-how-to-make-it-faster>`_.
     """
 
-    def __init__(self, case_sensitive=False):
+    def __init__(self, multi_match=False, case_sensitive=False):
         """
         Args:
             case_sensitive (boolean): Keyword search should be case sensitive set or not.
@@ -51,6 +51,7 @@ class KeywordProcessor(object):
             self.non_word_boundaries = set(string.digits + string.ascii_letters + '_')
         self.keyword_trie_dict = dict()
         self.case_sensitive = case_sensitive
+        self.multi_match = multi_match
         self._terms_in_trie = 0
 
     def __len__(self):
@@ -121,7 +122,7 @@ class KeywordProcessor(object):
         if self._keyword in current_dict and len_covered == len(word):
             return current_dict[self._keyword]
 
-    def __setitem__(self, keyword, clean_name=None, multi_match=False, ):
+    def __setitem__(self, keyword, clean_name=None):
         """To add keyword to the dictionary
         pass the keyword and the clean name it maps to.
 
@@ -150,7 +151,7 @@ class KeywordProcessor(object):
                 status = True
                 self._terms_in_trie += 1
 
-            if current_dict.get(self._keyword) and multi_match:
+            if current_dict.get(self._keyword) and self.multi_match:
                 # if multi_match and is str, convert to list and append, else append directly
                 if isinstance(current_dict[self._keyword], str):
                     current_dict[self._keyword] = [current_dict[self._keyword]]
@@ -229,7 +230,7 @@ class KeywordProcessor(object):
         """
         self.non_word_boundaries.add(character)
 
-    def add_keyword(self, keyword, multi_match=False, clean_name=None):
+    def add_keyword(self, keyword, clean_name=None):
         """To add one or more keywords to the dictionary
         pass the keyword and the clean name it maps to.
 
@@ -252,7 +253,7 @@ class KeywordProcessor(object):
             # >>> keyword_processor.add_keyword('Big Apple')
             # >>> # This case 'Big Apple' will return 'Big Apple'
         """
-        return self.__setitem__(keyword, clean_name=clean_name, multi_match=multi_match)
+        return self.__setitem__(keyword, clean_name=clean_name)
 
     def remove_keyword(self, keyword):
         """To remove one or more keywords from the dictionary
@@ -328,12 +329,12 @@ class KeywordProcessor(object):
             for line in f:
                 if '=>' in line:
                     keyword, clean_name = line.split('=>')
-                    self.add_keyword(keyword, multi_match=False, clean_name=clean_name.strip())
+                    self.add_keyword(keyword, clean_name=clean_name.strip())
                 else:
                     keyword = line.strip()
                     self.add_keyword(keyword)
 
-    def add_keywords_from_dict(self, keyword_dict, multi_match=False):
+    def add_keywords_from_dict(self, keyword_dict):
         """To add keywords from a dictionary
 
         Args:
@@ -356,7 +357,7 @@ class KeywordProcessor(object):
                 raise AttributeError("Value of key {} should be a list".format(clean_name))
 
             for keyword in keywords:
-                self.add_keyword(keyword, multi_match=multi_match, clean_name=clean_name)
+                self.add_keyword(keyword, clean_name=clean_name)
 
     def remove_keywords_from_dict(self, keyword_dict):
         """To remove keywords from a dictionary
