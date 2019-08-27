@@ -17,18 +17,18 @@ class KeywordProcessor(object):
             Defaults to False
 
     Examples:
-        >>> # import module
-        >>> from flashtext import KeywordProcessor
-        >>> # Create an object of KeywordProcessor
-        >>> keyword_processor = KeywordProcessor()
-        >>> # add keywords
-        >>> keyword_names = ['NY', 'new-york', 'SF']
-        >>> clean_names = ['new york', 'new york', 'san francisco']
-        >>> for keyword_name, clean_name in zip(keyword_names, clean_names):
-        >>>     keyword_processor.add_keyword(keyword_name, clean_name)
-        >>> keywords_found = keyword_processor.extract_keywords('I love SF and NY. new-york is the best.')
-        >>> keywords_found
-        >>> ['san francisco', 'new york', 'new york']
+        # >>> # import module
+        # >>> from flashtext import KeywordProcessor
+        # >>> # Create an object of KeywordProcessor
+        # >>> keyword_processor = KeywordProcessor()
+        # >>> # add keywords
+        # >>> keyword_names = ['NY', 'new-york', 'SF']
+        # >>> clean_names = ['new york', 'new york', 'san francisco']
+        # >>> for keyword_name, clean_name in zip(keyword_names, clean_names):
+        # >>>     keyword_processor.add_keyword(keyword_name, clean_name)
+        # >>> keywords_found = keyword_processor.extract_keywords('I love SF and NY. new-york is the best.')
+        # >>> keywords_found
+        # >>> ['san francisco', 'new york', 'new york']
 
     Note:
         * loosely based on `Aho-Corasick algorithm <https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm>`_.
@@ -42,7 +42,7 @@ class KeywordProcessor(object):
                 Defaults to False
         """
         self._keyword = '_keyword_'
-        self._white_space_chars = set(['.', '\t', '\n', '\a', ' ', ','])
+        self._white_space_chars = {'.', '\t', '\n', '\a', ' ', ','}
         try:
             # python 2.x
             self.non_word_boundaries = set(string.digits + string.letters + '_')
@@ -75,9 +75,9 @@ class KeywordProcessor(object):
                 If word is present as it is in keyword_trie_dict then we return True, else False
 
         Examples:
-            >>> keyword_processor.add_keyword('Big Apple')
-            >>> 'Big Apple' in keyword_processor
-            >>> # True
+            # >>> keyword_processor.add_keyword('Big Apple')
+            # >>> 'Big Apple' in keyword_processor
+            # >>> # True
 
         """
         if not self.case_sensitive:
@@ -104,9 +104,9 @@ class KeywordProcessor(object):
                 If word is present as it is in keyword_trie_dict then we return keyword mapped to it.
 
         Examples:
-            >>> keyword_processor.add_keyword('Big Apple', 'New York')
-            >>> keyword_processor['Big Apple']
-            >>> # New York
+            # >>> keyword_processor.add_keyword('Big Apple', 'New York')
+            # >>> keyword_processor['Big Apple']
+            # >>> # New York
         """
         if not self.case_sensitive:
             word = word.lower()
@@ -134,7 +134,7 @@ class KeywordProcessor(object):
                 if not provided, keyword will be used as the clean name also.
 
         Examples:
-            >>> keyword_processor['Big Apple'] = 'New York'
+            # >>> keyword_processor['Big Apple'] = 'New York'
         """
         status = False
         if not clean_name and keyword:
@@ -168,8 +168,8 @@ class KeywordProcessor(object):
                 keyword that you want to remove if it's present
 
         Examples:
-            >>> keyword_processor.add_keyword('Big Apple')
-            >>> del keyword_processor['Big Apple']
+            # >>> keyword_processor.add_keyword('Big Apple')
+            # >>> del keyword_processor['Big Apple']
         """
         status = False
         if keyword:
@@ -229,7 +229,7 @@ class KeywordProcessor(object):
         """
         self.non_word_boundaries.add(character)
 
-    def add_keyword(self, keyword, multi_match = False, clean_name=None):
+    def add_keyword(self, keyword, multi_match=False, clean_name=None):
         """To add one or more keywords to the dictionary
         pass the keyword and the clean name it maps to.
 
@@ -246,11 +246,11 @@ class KeywordProcessor(object):
                 The return value. True for success, False otherwise.
 
         Examples:
-            >>> keyword_processor.add_keyword('Big Apple', 'New York')
-            >>> # This case 'Big Apple' will return 'New York'
-            >>> # OR
-            >>> keyword_processor.add_keyword('Big Apple')
-            >>> # This case 'Big Apple' will return 'Big Apple'
+            # >>> keyword_processor.add_keyword('Big Apple', 'New York')
+            # >>> # This case 'Big Apple' will return 'New York'
+            # >>> # OR
+            # >>> keyword_processor.add_keyword('Big Apple')
+            # >>> # This case 'Big Apple' will return 'Big Apple'
         """
         return self.__setitem__(keyword, clean_name=clean_name, multi_match=multi_match)
 
@@ -267,12 +267,12 @@ class KeywordProcessor(object):
                 The return value. True for success, False otherwise.
 
         Examples:
-            >>> keyword_processor.add_keyword('Big Apple')
-            >>> keyword_processor.remove_keyword('Big Apple')
-            >>> # Returns True
-            >>> # This case 'Big Apple' will no longer be a recognized keyword
-            >>> keyword_processor.remove_keyword('Big Apple')
-            >>> # Returns False
+            # >>> keyword_processor.add_keyword('Big Apple')
+            # >>> keyword_processor.remove_keyword('Big Apple')
+            # >>> # Returns True
+            # >>> # This case 'Big Apple' will no longer be a recognized keyword
+            # >>> keyword_processor.remove_keyword('Big Apple')
+            # >>> # Returns False
 
         """
         return self.__delitem__(keyword)
@@ -289,9 +289,9 @@ class KeywordProcessor(object):
                 If word is present as it is in keyword_trie_dict then we return keyword mapped to it.
 
         Examples:
-            >>> keyword_processor.add_keyword('Big Apple', 'New York')
-            >>> keyword_processor.get('Big Apple')
-            >>> # New York
+            # >>> keyword_processor.add_keyword('Big Apple', 'New York')
+            # >>> keyword_processor.get('Big Apple')
+            # >>> # New York
         """
         return self.__getitem__(word)
 
@@ -305,18 +305,18 @@ class KeywordProcessor(object):
         Examples:
             keywords file format can be like:
 
-            >>> # Option 1: keywords.txt content
-            >>> # java_2e=>java
-            >>> # java programing=>java
-            >>> # product management=>product management
-            >>> # product management techniques=>product management
-
-            >>> # Option 2: keywords.txt content
-            >>> # java
-            >>> # python
-            >>> # c++
-
-            >>> keyword_processor.add_keyword_from_file('keywords.txt')
+            # >>> # Option 1: keywords.txt content
+            # >>> # java_2e=>java
+            # >>> # java programing=>java
+            # >>> # product management=>product management
+            # >>> # product management techniques=>product management
+            #
+            # >>> # Option 2: keywords.txt content
+            # >>> # java
+            # >>> # python
+            # >>> # c++
+            #
+            # >>> keyword_processor.add_keyword_from_file('keywords.txt')
 
         Raises:
             IOError: If `keyword_file` path is not valid
@@ -340,14 +340,15 @@ class KeywordProcessor(object):
             keyword_dict (dict): A dictionary with `str` key and (list `str`) as value
 
         Examples:
-            >>> keyword_dict = {
+            # >>> keyword_dict = {
                     "java": ["java_2e", "java programing"],
                     "product management": ["PM", "product manager"]
                 }
-            >>> keyword_processor.add_keywords_from_dict(keyword_dict)
+            # >>> keyword_processor.add_keywords_from_dict(keyword_dict)
 
         Raises:
             AttributeError: If value for a key in `keyword_dict` is not a list.
+            :param multi_match: Will return a list of matching keywords instead of replacing it
 
         """
         for clean_name, keywords in keyword_dict.items():
@@ -364,11 +365,11 @@ class KeywordProcessor(object):
             keyword_dict (dict): A dictionary with `str` key and (list `str`) as value
 
         Examples:
-            >>> keyword_dict = {
+            # >>> keyword_dict = {
                     "java": ["java_2e", "java programing"],
                     "product management": ["PM", "product manager"]
                 }
-            >>> keyword_processor.remove_keywords_from_dict(keyword_dict)
+            # >>> keyword_processor.remove_keywords_from_dict(keyword_dict)
 
         Raises:
             AttributeError: If value for a key in `keyword_dict` is not a list.
@@ -388,7 +389,7 @@ class KeywordProcessor(object):
             keyword_list (list(str)): List of keywords to add
 
         Examples:
-            >>> keyword_processor.add_keywords_from_list(["java", "python"]})
+            # >>> keyword_processor.add_keywords_from_list(["java", "python"]})
         Raises:
             AttributeError: If `keyword_list` is not a list.
 
@@ -406,7 +407,7 @@ class KeywordProcessor(object):
             keyword_list (list(str)): List of keywords to remove
 
         Examples:
-            >>> keyword_processor.remove_keywords_from_list(["java", "python"]})
+            # >>> keyword_processor.remove_keywords_from_list(["java", "python"]})
         Raises:
             AttributeError: If `keyword_list` is not a list.
 
@@ -433,12 +434,12 @@ class KeywordProcessor(object):
                 And value mapped to it is the clean name mapped to it.
 
         Examples:
-            >>> keyword_processor = KeywordProcessor()
-            >>> keyword_processor.add_keyword('j2ee', 'Java')
-            >>> keyword_processor.add_keyword('Python', 'Python')
-            >>> keyword_processor.get_all_keywords()
-            >>> {'j2ee': 'Java', 'python': 'Python'}
-            >>> # NOTE: for case_insensitive all keys will be lowercased.
+            # >>> keyword_processor = KeywordProcessor()
+            # >>> keyword_processor.add_keyword('j2ee', 'Java')
+            # >>> keyword_processor.add_keyword('Python', 'Python')
+            # >>> keyword_processor.get_all_keywords()
+            # >>> {'j2ee': 'Java', 'python': 'Python'}
+            # >>> # NOTE: for case_insensitive all keys will be lowercased.
         """
         terms_present = {}
         if not term_so_far:
@@ -465,13 +466,13 @@ class KeywordProcessor(object):
             keywords_extracted (list(str)): List of terms/keywords found in sentence that match our corpus
 
         Examples:
-            >>> from flashtext import KeywordProcessor
-            >>> keyword_processor = KeywordProcessor()
-            >>> keyword_processor.add_keyword('Big Apple', 'New York')
-            >>> keyword_processor.add_keyword('Bay Area')
-            >>> keywords_found = keyword_processor.extract_keywords('I love Big Apple and Bay Area.')
-            >>> keywords_found
-            >>> ['New York', 'Bay Area']
+            # >>> from flashtext import KeywordProcessor
+            # >>> keyword_processor = KeywordProcessor()
+            # >>> keyword_processor.add_keyword('Big Apple', 'New York')
+            # >>> keyword_processor.add_keyword('Bay Area')
+            # >>> keywords_found = keyword_processor.extract_keywords('I love Big Apple and Bay Area.')
+            # >>> keywords_found
+            # >>> ['New York', 'Bay Area']
 
         """
         keywords_extracted = []
@@ -575,13 +576,13 @@ class KeywordProcessor(object):
             new_sentence (str): Line of text with replaced keywords
 
         Examples:
-            >>> from flashtext import KeywordProcessor
-            >>> keyword_processor = KeywordProcessor()
-            >>> keyword_processor.add_keyword('Big Apple', 'New York')
-            >>> keyword_processor.add_keyword('Bay Area')
-            >>> new_sentence = keyword_processor.replace_keywords('I love Big Apple and bay area.')
-            >>> new_sentence
-            >>> 'I love New York and Bay Area.'
+            # >>> from flashtext import KeywordProcessor
+            # >>> keyword_processor = KeywordProcessor()
+            # >>> keyword_processor.add_keyword('Big Apple', 'New York')
+            # >>> keyword_processor.add_keyword('Bay Area')
+            # >>> new_sentence = keyword_processor.replace_keywords('I love Big Apple and bay area.')
+            # >>> new_sentence
+            # >>> 'I love New York and Bay Area.'
 
         """
         if not sentence:
