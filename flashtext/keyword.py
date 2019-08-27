@@ -566,12 +566,13 @@ class KeywordProcessor(object):
             return keywords_extracted
 
         # return [value[0] for value in keywords_extracted]
-        match_keyword = []
+        match_keyword = set()
         for value in keywords_extracted:
             if isinstance(value[0], str):
-                match_keyword.append(value[0])
+                match_keyword.add(value[0])
             else:
-                match_keyword.extend(value[0])
+                for item in value[0]:
+                    match_keyword.add(item)
         return match_keyword
 
 

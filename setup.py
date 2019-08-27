@@ -16,7 +16,7 @@ class PyTest(Command):
         raise SystemExit(errno)
 
 name = 'flashtext-mod'
-version = '2.76'
+version = '2.77'
 
 cmdclass = {'test': PyTest}
 
