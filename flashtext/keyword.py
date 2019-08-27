@@ -121,7 +121,7 @@ class KeywordProcessor(object):
         if self._keyword in current_dict and len_covered == len(word):
             return current_dict[self._keyword]
 
-    def __setitem__(self, keyword, clean_name=None):
+    def __setitem__(self, keyword, clean_name=None, multi_match=False, ):
         """To add keyword to the dictionary
         pass the keyword and the clean name it maps to.
 
@@ -149,7 +149,14 @@ class KeywordProcessor(object):
             if self._keyword not in current_dict:
                 status = True
                 self._terms_in_trie += 1
-            current_dict[self._keyword] = clean_name
+
+            if current_dict.get(self._keyword) and multi_match:
+                # if multi_match and is str, convert to list and append, else append directly
+                if isinstance(current_dict[self._keyword], str):
+                    current_dict[self._keyword] = [current_dict[self._keyword]]
+                current_dict[self._keyword].append(clean_name)
+            else:
+                current_dict[self._keyword] = clean_name
         return status
 
     def __delitem__(self, keyword):
@@ -222,7 +229,7 @@ class KeywordProcessor(object):
         """
         self.non_word_boundaries.add(character)
 
-    def add_keyword(self, keyword, clean_name=None):
+    def add_keyword(self, keyword, multi_match = False, clean_name=None):
         """To add one or more keywords to the dictionary
         pass the keyword and the clean name it maps to.
 
@@ -245,7 +252,7 @@ class KeywordProcessor(object):
             >>> keyword_processor.add_keyword('Big Apple')
             >>> # This case 'Big Apple' will return 'Big Apple'
         """
-        return self.__setitem__(keyword, clean_name)
+        return self.__setitem__(keyword, clean_name=clean_name, multi_match=multi_match)
 
     def remove_keyword(self, keyword):
         """To remove one or more keywords from the dictionary
@@ -321,12 +328,12 @@ class KeywordProcessor(object):
             for line in f:
                 if '=>' in line:
                     keyword, clean_name = line.split('=>')
-                    self.add_keyword(keyword, clean_name.strip())
+                    self.add_keyword(keyword, multi_match=False, clean_name=clean_name.strip())
                 else:
                     keyword = line.strip()
                     self.add_keyword(keyword)
 
-    def add_keywords_from_dict(self, keyword_dict):
+    def add_keywords_from_dict(self, keyword_dict, multi_match=False):
         """To add keywords from a dictionary
 
         Args:
@@ -348,7 +355,7 @@ class KeywordProcessor(object):
                 raise AttributeError("Value of key {} should be a list".format(clean_name))
 
             for keyword in keywords:
-                self.add_keyword(keyword, clean_name)
+                self.add_keyword(keyword, multi_match=multi_match, clean_name=clean_name)
 
     def remove_keywords_from_dict(self, keyword_dict):
         """To remove keywords from a dictionary
@@ -580,7 +587,7 @@ class KeywordProcessor(object):
         if not sentence:
             # if sentence is empty or none just return the same.
             return sentence
-        new_sentence = []
+        new_sentence = ''
         orig_sentence = sentence
         if not self.case_sensitive:
             sentence = sentence.lower()
@@ -639,17 +646,17 @@ class KeywordProcessor(object):
                             current_word = current_word_continued
                     current_dict = self.keyword_trie_dict
                     if longest_sequence_found:
-                        new_sentence.append(longest_sequence_found + current_white_space)
+                        new_sentence += longest_sequence_found + current_white_space
                         current_word = ''
                         current_white_space = ''
                     else:
-                        new_sentence.append(current_word)
+                        new_sentence += current_word
                         current_word = ''
                         current_white_space = ''
                 else:
                     # we reset current_dict
                     current_dict = self.keyword_trie_dict
-                    new_sentence.append(current_word)
+                    new_sentence += current_word
                     current_word = ''
                     current_white_space = ''
             elif char in current_dict:
@@ -667,15 +674,15 @@ class KeywordProcessor(object):
                         break
                     idy += 1
                 idx = idy
-                new_sentence.append(current_word)
+                new_sentence += current_word
                 current_word = ''
                 current_white_space = ''
             # if we are end of sentence and have a sequence discovered
             if idx + 1 >= sentence_len:
                 if self._keyword in current_dict:
                     sequence_found = current_dict[self._keyword]
-                    new_sentence.append(sequence_found)
+                    new_sentence += sequence_found
                 else:
-                    new_sentence.append(current_word)
+                    new_sentence += current_word
             idx += 1
-        return "".join(new_sentence)
+        return new_sentence
