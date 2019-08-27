@@ -1,0 +1,9 @@
+Uploading and Installation
+python setup.py sdist bdist_wheel
+twine upload dist/*
+sudo apt-get update
+pip install flashtext-mod
+
+Reference:
+1. https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56
+2. https://linuxize.com/post/how-to-install-pip-on-ubuntu-18.04/
