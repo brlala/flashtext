@@ -1,7 +1,7 @@
 Uploading and Installation
 python setup.py sdist bdist_wheel
 twine upload dist/*
-sudo apt-get update
+sudo apt update
 pip install flashtext-mod
 
 Reference:
