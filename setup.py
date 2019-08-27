@@ -16,7 +16,7 @@ class PyTest(Command):
         raise SystemExit(errno)
 
 name = 'flashtext-mod'
-version = '2.71'
+version = '2.72'
 
 cmdclass = {'test': PyTest}
 
@@ -33,7 +33,7 @@ setup(
     author='brlala',
     author_email='henrytlh@hotmail.com',
     description='Extract/Replaces keywords in sentences.',
-    download_url='https://github.com/brlala/flashtext-mod/archive/v2.71.tar.gz',
+    download_url='https://github.com/brlala/flashtext-mod/archive/v2.72.tar.gz',
     long_description=open('README.rst').read(),
     packages=['flashtext-mod'],
     install_requires=[],
